@@ -12,7 +12,7 @@ namespace Script.UI
     {
         // Start is called before the first frame update
         //public TextMeshProUGUI ;
-        private ChatBoxUI[] Chatboxpool;
+        private GameObject[] Chatboxpool;
         
         [SerializeField]
         private Sprite[] ChatSprite;
@@ -23,6 +23,8 @@ namespace Script.UI
 
         private float chatboxdistance;
         private int checkboxshowingrange;
+        public float upperboundary;
+        public float lowerboundary;
 
         private Vector3 ChatBarOriginalPosition;
         public static ChatManager Instance { get; private set; }
@@ -42,30 +44,29 @@ namespace Script.UI
         {
             string[] content;
             string[] sentence = plot.Split('\n');
-            Chatboxpool = new ChatBoxUI[sentence.Length];
+            Chatboxpool = new GameObject[sentence.Length];
             ChatBoxUI temp = null;
             for(int i =0; i < sentence.Length;i++)
             {
                 content = sentence[i].Split(':');
-                temp = gameObject.AddComponent<ChatBoxUI>();
                 GameObject newObject = Instantiate(chatUiPrefab,Parent.transform) as GameObject;
-                ChatBoxUI myObject = newObject.GetComponent<ChatBoxUI>();
-                Chatboxpool[i] = myObject;
+                
+                Chatboxpool[i] = newObject;
                 if (String.Compare(content[0], "G", StringComparison.Ordinal)==0)
                 {
-                    Chatboxpool[i].initialized(People.github,ChatSprite[0],content[1]);
+                    Chatboxpool[i].GetComponent<ChatBoxUI>().initialized(People.github,ChatSprite[0],content[1]);
                 }
                 else if (String.Compare(content[0], "P", StringComparison.Ordinal) == 0)
                 {
-                    Chatboxpool[i].initialized(People.programmer,ChatSprite[1],content[1]);
+                    Chatboxpool[i].GetComponent<ChatBoxUI>().initialized(People.programmer,ChatSprite[1],content[1]);
                 }
                 else if (String.Compare(content[0], "H", StringComparison.Ordinal)==0)
                 {
-                    Chatboxpool[i].initialized(People.Boss,ChatSprite[2],content[1]);
+                    Chatboxpool[i].GetComponent<ChatBoxUI>().initialized(People.Boss,ChatSprite[2],content[1]);
                 }
                 else if (String.Compare(content[0], "B", StringComparison.Ordinal) == 0)
                 {
-                    Chatboxpool[i].initialized(People.Hacker, ChatSprite[3], content[1]);
+                    Chatboxpool[i].GetComponent<ChatBoxUI>().initialized(People.Hacker, ChatSprite[3], content[1]);
                 }
                 else
                 {
@@ -87,7 +88,6 @@ namespace Script.UI
                 var tran = scrollbar.transform.GetChild(i).GetComponent<RectTransform>();
                 // Debug.Log("x y z"+position.x+" "+position.y+" "+position.z);
                 Chatboxpool[i].GetComponent<RectTransform>().position = tran.position;
-                
                 // Chatboxpool[i].transform.position = UI_Worldspace.transform.position;
             }
         }
@@ -101,7 +101,7 @@ namespace Script.UI
                 scrollbar.transform.Translate(Vector3.down*distance);
                 checkboxshowingrange--;
             }
-            else if (checkboxshowingrange< Chatboxpool.Length && Input.GetKeyDown(KeyCode.W))
+            else if (checkboxshowingrange+3< Chatboxpool.Length && Input.GetKeyDown(KeyCode.W))
             {
                 scrollbar.transform.Translate(Vector3.up*distance);
                 checkboxshowingrange++;
@@ -109,6 +109,18 @@ namespace Script.UI
             else
             {
                 
+            }
+
+            for (int i = 0; i < Chatboxpool.Length; i++)
+            {
+                if (i < 3 + checkboxshowingrange && i >= checkboxshowingrange)
+                {
+                    Chatboxpool[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    Chatboxpool[i].gameObject.SetActive(false);
+                }
             }
 
         }

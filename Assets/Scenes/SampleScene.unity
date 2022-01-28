@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44761127, g: 0.49758065, b: 0.5753577, a: 1}
+  m_IndirectSpecularColor: {r: 0.4476108, g: 0.49757993, b: 0.5753568, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3164,7 +3164,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &300136133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3955,6 +3955,8 @@ MonoBehaviour:
   ChatBar: {fileID: 153583487}
   chatUiPrefab: {fileID: 5828320923608162368, guid: 6bf08dc154dba4d259336cdb0d0640ec, type: 3}
   Parent: {fileID: 1184398277}
+  upperboundary: 1
+  lowerboundary: -1
 --- !u!1 &387321791
 GameObject:
   m_ObjectHideFlags: 0
