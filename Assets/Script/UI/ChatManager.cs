@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Script.UI
 {
@@ -16,6 +17,8 @@ namespace Script.UI
         
         [SerializeField]
         private Sprite[] ChatSprite;
+
+        private Rigidbody player;
 
         [SerializeField] private GameObject ChatBar;
         [SerializeField] private GameObject chatUiPrefab;
@@ -42,6 +45,10 @@ namespace Script.UI
 //seperate the text and initialize 
         public void sepearte_text(string plot)
         {
+            
+            player = GameObject.Find("Player").GetComponent<Rigidbody>();
+            player.constraints = RigidbodyConstraints.FreezeAll;
+            
             string[] content;
             string[] sentence = plot.Split('\n');
             Chatboxpool = new GameObject[sentence.Length];
@@ -80,11 +87,6 @@ namespace Script.UI
         {
             for (int i = 0; i < Chatboxpool.Length; i++)
             {
-                // var tran0 = scrollbar.transform.GetChild(0).Find("G" + i.ToString()).GetComponent<RectTransform>();
-                //var position = GetCenterPosition(tran);
-                //Debug.Log("x y z"+position.x+" "+position.y+" "+position.z);
-                //Chatboxpool[i].transform.position = new Vector3(position.x, position.y, position.z);
-                
                 var tran = scrollbar.transform.GetChild(i).GetComponent<RectTransform>();
                 // Debug.Log("x y z"+position.x+" "+position.y+" "+position.z);
                 Chatboxpool[i].GetComponent<RectTransform>().position = tran.position;
@@ -96,6 +98,9 @@ namespace Script.UI
         {
             // Debug.Log(scrollbar);
             // Debug.Log(scrollbar.transform.GetChild(0).position.y);
+
+            distance = scrollbar.GetComponent<GridLayoutGroup>().cellSize.y + scrollbar.GetComponent<GridLayoutGroup>().spacing.y;
+            Debug.Log(distance);
             if ( checkboxshowingrange>=1 && Input.GetKeyDown(KeyCode.S))
             {
                 scrollbar.transform.Translate(Vector3.down*distance);
@@ -137,7 +142,7 @@ namespace Script.UI
             
             sepearte_text(readtext());
             UpdateSpawnPosition(ChatBar);
-            chatboxdistance =  GetverticalDistance(Chatboxpool[0].GetComponent<RectTransform>()).magnitude;
+            chatboxdistance =  GetverticalDistance(Chatboxpool[0].GetComponent<ChatBoxUI>().GetComponent<RectTransform>()).magnitude;
             ChatBarOriginalPosition = ChatBar.transform.position;
         }
 
@@ -145,7 +150,8 @@ namespace Script.UI
         {
             sepearte_text(readtext());
             UpdateSpawnPosition(ChatBar);
-            chatboxdistance =  GetverticalDistance(Chatboxpool[0].GetComponent<RectTransform>()).magnitude;
+            chatboxdistance =  GetverticalDistance(Chatboxpool[0].GetComponent<ChatBoxUI>().GetComponent<RectTransform>()).magnitude;
+            Debug.Log(chatboxdistance);
             ChatBarOriginalPosition = ChatBar.transform.position;
         }
 
